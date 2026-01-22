@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Bitcount+Grid+Single:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap');
 
 /* Local fonts */
 @font-face {
@@ -64,6 +64,7 @@
   --font-tasa: 'TASA Orbiter', sans-serif;
   --font-geist: 'Geist', sans-serif;
   --font-humane: 'Humane-Bold', sans-serif;
+  --font-instrument : 'Intrument Sans', sans-serif;
 
 }
 

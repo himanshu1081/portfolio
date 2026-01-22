@@ -52,7 +52,7 @@ const Hero: React.FC = () => {
                             initial={{ opacity: 0, x: "-10%" }}
                             animate={{ opacity: 1, x: "1%" }}
                             transition={{ duration: 1 }}
-                            className="font-tasa text-sm md:text-base flex flex-col gap-4 justify-center items-start w-full">
+                            className="font-instrument font-bold text-sm md:text-base flex flex-col gap-4 justify-center items-start w-full">
                             <a href="https://x.com/_himanshu_108" target="_blank" className="flex justify-center items-center gap-2 hover:text-black">
                                 <FaTwitter size={25} /> Twitter
                             </a>

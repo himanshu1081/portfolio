@@ -1,4 +1,3 @@
-import './App.css'
 import { Hero } from './sections/Hero'
 import Introduction from './sections/Introduction'
 import Services from './sections/Techstack'

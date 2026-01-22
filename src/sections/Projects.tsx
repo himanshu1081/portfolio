@@ -32,7 +32,7 @@ const Cards: Omit<CardProps, "containerProgressY" | "range" | "target">[] = [
     date: "June 2025 - August 2025",
     deployLink: "https://vastora.vercel.app/",
     about:
-      "Vastora is a YouTube-like web app where users can explore, watch, and share videos seamlessly...",
+      "Vastora is a YouTube-like web app where users can explore, watch, and share videos seamlessly.",
   },
   {
     sno: 2,
@@ -52,17 +52,17 @@ const Cards: Omit<CardProps, "containerProgressY" | "range" | "target">[] = [
   },
   {
     sno: 3,
-    projectName: "Greenstone London",
+    projectName: "Design By Supriya",
     image: [
-      "/images/greenstone.jpg",
-      "/images/greenstone1.png",
-      "/images/greenstone2.png",
+      "/images/DesignBySupriya1.png",
+      "/images/DesignBySupriya2.png",
+      "/images/DesignBySupriya3.png",
     ],
-    githubLink: "https://github.com/himanshu1081/GreenstoneLondon",
-    date: "October 2025",
-    deployLink: "https://greenstone-london-ju93.vercel.app",
+    githubLink: "https://github.com/himanshu1081/designbysupriya",
+    date: "January 2026",
+    deployLink: "https://designbysupriya.vercel.app",
     about:
-      "Greenstone London — a clean, responsive landing page built using React and TailwindCSS...",
+      "Design By Supriya — a clean, responsive landing page built using React and TailwindCSS.",
   },
 ];
 
@@ -77,7 +77,7 @@ export default function ScrollStack() {
     return (
         <>
             <div
-                className="w-full p-5 flex justify-between items-center flex-col border-y border-[#403b3b] gap-4 relative"
+                className="w-full p-3 flex justify-between items-center flex-col bg-[#121212] border-[#000000] shadow-xl gap-4 relative rounded-md"
                 id="projects" >
                 <motion.div className="text-[#f05038] text-sm sm:text-lg font-inter-display w-full z-10 sticky left-2 top-2"
                     initial={{ opacity: 0, y: 10 }}

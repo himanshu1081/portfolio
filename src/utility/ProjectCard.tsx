@@ -53,7 +53,7 @@ const ProjectCard: React.FC<CardProps> = ({ projectName, image, githubLink, depl
         <>
             <motion.div
                 ref={cardRef}
-                className="flex justify-between md:justify-center flex-col md:flex-row items-center rounded-md h-[90svh] lg:h-[85svh] md:p-2 w-23/24 z-0 sticky top-10 lg:top-20 md:gap-2 font-inter-display-bold bg-[#121111]  }"
+                className="flex justify-between md:justify-center flex-col md:flex-row items-center rounded-xl h-[90svh] lg:h-[85svh] md:p-2 w-23/24 z-0 sticky top-10 lg:top-20 md:gap-2 font-inter-display-bold bg-[#121111] md:border md:border-black/20  }"
                 style={{ opacity, scale }}>
                 <div className="w-full h-full md:w-4/6 md:h-4/4 " >
                     <span className="relative">
@@ -76,7 +76,7 @@ const ProjectCard: React.FC<CardProps> = ({ projectName, image, githubLink, depl
                         <span className="text-lg sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl">
                             {projectName}
                         </span>
-                        <span className="font-inter-display text-[#a29b9b] text-xs md:text-sm lg:text-base xl:text-lg">
+                        <span className="font-instrument text-[#a29b9b] text-xs md:text-sm lg:text-base xl:text-lg">
                             {about}
                         </span>
                     </div>
