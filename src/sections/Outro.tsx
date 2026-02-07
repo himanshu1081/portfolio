@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 //icons
 import { FaArrowUp, FaLinkedin } from "react-icons/fa";
-import { FaSquareGithub, FaSquareInstagram, FaSquareXTwitter } from "react-icons/fa6";
+import { FaSquareGithub, FaSquareXTwitter } from "react-icons/fa6";
 import me1 from "../assets/videos/me1.gif";
 
 
@@ -51,20 +51,11 @@ const Outro: React.FC = () => {
                                 <FaSquareGithub />
                             </motion.a>
                             <motion.a
-                                href="https://www.instagram.com/hiwnshuuu"
-                                target="_blank"
-                                initial={{ opacity: 0, y: "20%" }}
-                                whileInView={{ opacity: 1, y: "0%" }}
-                                transition={{ duration: .5, delay: .8 }}
-                                className="whitespace-nowrap hover:text-black hover:scale-105 transition-all ease-in duration-75 cursor-pointer">
-                                <FaSquareInstagram />
-                            </motion.a>
-                            <motion.a
                                 href="https://www.linkedin.com/in/himanshu1081"
                                 target="_blank"
                                 initial={{ opacity: 0, y: "20%" }}
                                 whileInView={{ opacity: 1, y: "0%" }}
-                                transition={{ duration: .5, delay: 1 }}
+                                transition={{ duration: .5, delay: .8 }}
                                 className="whitespace-nowrap hover:text-black hover:scale-105 transition-all ease-in duration-75 cursor-pointer">
                                 <FaLinkedin />
                             </motion.a>
@@ -73,7 +64,7 @@ const Outro: React.FC = () => {
                                 target="_blank"
                                 initial={{ opacity: 0, y: "20%" }}
                                 whileInView={{ opacity: 1, y: "0%" }}
-                                transition={{ duration: .5, delay: 1.2 }}
+                                transition={{ duration: .5, delay: 1}}
                                 className="whitespace-nowrap hover:text-black hover:scale-105 transition-all ease-in duration-75 cursor-pointer">
                                 <FaSquareXTwitter />
                             </motion.a>

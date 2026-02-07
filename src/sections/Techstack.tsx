@@ -125,20 +125,26 @@ const otherTools: Framework[] = [
   },
   {
     sno: 4,
+    name: "Supabase",
+    logo: "/svg/Supabase-Icon--Streamline-Svg-Logos.svg",
+  },
+  {
+    sno: 5,
     name: "ChatGPT",
     logo: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg",
   },
   {
-    sno: 5,
+    sno: 6,
     name: "Gemini",
     logo: "/svg/gemini-color.svg",
   },
   {
-    sno: 6,
+    sno: 7,
     name: "Framer Motion",
     logo: "/svg/Motion_Logo_0.svg",
   },
 ];
+
 
 
 

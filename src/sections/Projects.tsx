@@ -18,53 +18,52 @@ interface CardProps {
 }
 
 const Cards: Omit<CardProps, "containerProgressY" | "range" | "target">[] = [
-  {
-    sno: 1,
-    projectName: "Vastora",
-    image: [
-      "/images/vastora1.png",
-      "/images/vastora2.png",
-      "/images/vastora3.png",
-      "/images/vastora4.png",
-      "/images/vastora5.png",
-    ],
-    githubLink: "https://github.com/himanshu1081/Vastora",
-    date: "June 2025 - August 2025",
-    deployLink: "https://vastora.vercel.app/",
-    about:
-      "Vastora is a YouTube-like web app where users can explore, watch, and share videos seamlessly.",
-  },
-  {
-    sno: 2,
-    projectName: "Portfolio",
-    image: [
-      "/images/portfolio.png",
-      "/images/portfolio1.png",
-      "/images/portfolio2.png",
-      "/images/portfolio3.png",
-      "/images/portfolio4.png",
-    ],
-    githubLink: "https://github.com/himanshu1081/portfolio",
-    date: "November 2025",
-    deployLink: "https://himanshu-chaudhary-portfolio.vercel.app/",
-    about:
-      "My personal developer portfolio built using Typescript, React, TailwindCSS, and Framer Motion animations.",
-  },
-  {
-    sno: 3,
-    projectName: "Design By Supriya",
-    image: [
-      "/images/DesignBySupriya1.png",
-      "/images/DesignBySupriya2.png",
-      "/images/DesignBySupriya3.png",
-    ],
-    githubLink: "https://github.com/himanshu1081/designbysupriya",
-    date: "January 2026",
-    deployLink: "https://designbysupriya.vercel.app",
-    about:
-      "Design By Supriya — a clean, responsive landing page built using React and TailwindCSS.",
-  },
+    {
+        sno: 1,
+        projectName: "Vastora",
+        image: [
+            "/images/vastora1.png",
+            "/images/vastora2.png",
+            "/images/vastora3.png",
+            "/images/vastora4.png",
+            "/images/vastora5.png",
+        ],
+        githubLink: "https://github.com/himanshu1081/Vastora",
+        date: "June 2025 - August 2025",
+        deployLink: "https://vastora.vercel.app/",
+        about:
+            "Vastora is a YouTube-like web app where users can explore, watch, and share videos seamlessly.",
+    },
+    {
+        sno: 2,
+        projectName: "Vexa AI",
+        image: [
+            "/images/vexa1.png",
+            "/images/vexa2.png",
+            "/images/vexa3.png",
+        ],
+        githubLink: "https://github.com/himanshu1081/vexa",
+        date: "November 2025 - Present",
+        deployLink: "https://vexa4ai.vercel.app/",
+        about:
+            "Vexa is an AI chat application (Gen AI) built as an OpenAI API wrapper for real-time conversational experiences.",
+    },
+    {
+        sno: 3,
+        projectName: "Design By Supriya",
+        image: [
+            "/images/DesignBySupriya1.png",
+            "/images/DesignBySupriya2.png",
+            "/images/DesignBySupriya3.png",
+        ],
+        githubLink: "https://github.com/himanshu1081/designbysupriya",
+        date: "January 2026",
+        deployLink: "https://designbysupriya.vercel.app",
+        about:
+            "Design By Supriya is a clean, responsive landing page built using React and TailwindCSS.",
+    },
 ];
+
 
 
 
