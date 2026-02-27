@@ -33,7 +33,7 @@ const Introduction: React.FC = () => {
                     <motion.span className="w-3/4 md:w-5/12 text-xs sm:text-sm lg:text-base  "
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1, delay: .5 }}
+                        transition={{ duration: 1, delay: .4 }}
                         viewport={{ once: true}}>
                         I turn ideas into polished, functional websites with clean, efficient code. My focus is on smooth, scalable solutions that make a real impact.
                     </motion.span>
