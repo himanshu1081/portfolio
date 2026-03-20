@@ -105,6 +105,11 @@ const tools: Framework[] = [
     name: "npm",
     logo: "https://upload.wikimedia.org/wikipedia/commons/d/db/Npm-logo.svg",
   },
+  {
+    sno: 6,
+    name: "Docker",
+    logo: "/svg/docker-mark-ocean-blue.svg",
+  },
 ];
 
 const otherTools: Framework[] = [
@@ -143,6 +148,11 @@ const otherTools: Framework[] = [
     name: "Framer Motion",
     logo: "/svg/Motion_Logo_0.svg",
   },
+  {
+    sno: 8,
+    name: "Claude",
+    logo: "/svg/claude-ai-icon.svg",
+  }
 ];
 
 

@@ -13,7 +13,7 @@ interface CardProps {
     projectName: string,
     image: Array<string>,
     githubLink: string,
-    deployLink: string,
+    deployLink: string | null,
     about: string,
     date: string,
     containerProgressY: MotionValue<number>,
@@ -73,10 +73,10 @@ const ProjectCard: React.FC<CardProps> = ({ projectName, image, githubLink, depl
                         <span className="font-dm-mono font-bold text-xs md:text-sm lg:text-base xl:text-xl">
                             ({date})
                         </span>
-                        <span className="text-lg sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl">
+                        <span className="text-lg sm:text-3xl md:text-4xl lg:text-5xl 2xl:text-5xl">
                             {projectName}
                         </span>
-                        <span className="font-instrument text-[#a29b9b] text-xs md:text-sm lg:text-base xl:text-lg">
+                        <span className="font-instrument text-[#a29b9b] text-xs md:text-sm lg:text-base 2xl:text-md">
                             {about}
                         </span>
                     </div>
@@ -90,16 +90,18 @@ const ProjectCard: React.FC<CardProps> = ({ projectName, image, githubLink, depl
                             <span>
                                 <FaExternalLinkAlt />
                             </span></a>
-                        <a href={deployLink}
-                            target="_blank"
-                            className="flex justify-start gap-2 items-center border-y p-2 " >
-                            <span className="hover:text-white">
-                                Deployed Link
-                            </span>
-                            <span>
-                                <FaExternalLinkAlt />
-                            </span>
-                        </a>
+                        {deployLink &&
+                            <a href={deployLink}
+                                target="_blank"
+                                className="flex justify-start gap-2 items-center border-y p-2 " >
+                                <span className="hover:text-white">
+                                    Deployed Link
+                                </span>
+                                <span>
+                                    <FaExternalLinkAlt />
+                                </span>
+                            </a>
+                        }
                     </div>
                 </div>
             </motion.div >

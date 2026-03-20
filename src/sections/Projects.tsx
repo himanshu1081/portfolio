@@ -9,7 +9,7 @@ interface CardProps {
     projectName: string,
     image: Array<string>,
     githubLink: string,
-    deployLink: string,
+    deployLink: string | null,
     about: string,
     date: string,
     containerProgressY: MotionValue<number>,
@@ -49,19 +49,19 @@ const Cards: Omit<CardProps, "containerProgressY" | "range" | "target">[] = [
             "Vexa is an AI chat application (Gen AI) built as an OpenAI API wrapper for real-time conversational experiences.",
     },
     {
-        sno: 3,
-        projectName: "Design By Supriya",
-        image: [
-            "/images/DesignBySupriya1.png",
-            "/images/DesignBySupriya2.png",
-            "/images/DesignBySupriya3.png",
-        ],
-        githubLink: "https://github.com/himanshu1081/designbysupriya",
-        date: "January 2026",
-        deployLink: "https://designbysupriya.vercel.app",
-        about:
-            "Design By Supriya is a clean, responsive landing page built using React and TailwindCSS.",
-    },
+    sno: 3,
+    projectName: "MakeMyResume",
+    image: [
+        "/images/MakeMyResume1.png",
+        "/images/MakeMyResume2.png",
+        "/images/MakeMyResume3.png",
+    ],
+    githubLink: "https://github.com/himanshu1081/MakeMyResume",
+    date: "February 2026",
+    deployLink: null,
+    about:
+        "MakeMyResume is a Chrome extension that tailors resumes based on job descriptions using AI, improving ATS matching and reducing manual customization effort.",
+}
 ];
 
 
