@@ -1,9 +1,10 @@
 import ProjectCard from "../utility/ProjectCard";
 import { motion, useScroll } from "motion/react"
 import { MotionValue } from "framer-motion"
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Box from "../utility/Box";
 import { IoIosCloseCircle } from "react-icons/io";
+import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from "body-scroll-lock";
 
 interface CardProps {
     sno: number,
@@ -127,17 +128,49 @@ export default function ScrollStack() {
     })
 
     const [openModal, setOpenModal] = useState<boolean>(false)
+    const modalRef = useRef<HTMLDivElement | null>(null);
 
+    useEffect(() => {
+        const el = modalRef.current;
+        if (!el) return;
+
+        if (openModal) {
+            disableBodyScroll(el);
+        } else {
+            enableBodyScroll(el);
+        }
+
+        return () => {
+            if (el) enableBodyScroll(el);
+        };
+    }, [openModal]);
+
+
+    useEffect(() => {
+        return () => {
+            clearAllBodyScrollLocks();
+        };
+    }, []);
 
     return (
         <>
             {
                 openModal &&
-                <div className="h-5/6 w-5/6 bg-black/85 backdrop-blur-2xl border-white/10 border fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-100 rounded-lg overflow-y-auto ">
+                <div className="h-screen w-screen bg-black/85 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-99"
+                    onClick={() => setOpenModal(false)} >
+                </div>
+
+            }
+            {
+                openModal &&
+                <div
+                    ref={modalRef}
+                    onClick={(e) => { e.stopPropagation() }}
+                    className="h-5/6 w-5/6 bg-black/85 backdrop-blur-2xl border-white/10 border fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-100 rounded-lg overflow-y-auto ">
                     <div className="flex justify-between p-2 px-5">
                         <h3>All Projects</h3>
                         <button className="cursor-pointer rounded-full flex items-center justify-center" onClick={() => setOpenModal(false)}>
-                            <IoIosCloseCircle color="red"/>
+                            <IoIosCloseCircle color="red" />
                         </button>
                     </div>
                     <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-center justify-center">
@@ -146,9 +179,6 @@ export default function ScrollStack() {
                                 <Box name={p.projectName} image={p.image[0]} about={p.about} githubLink={p.githubLink} deployedLink={p.deployLink} />
                             </div>
                         ))}
-                    </div>
-                    <div>
-
                     </div>
                 </div>
 

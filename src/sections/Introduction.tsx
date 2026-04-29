@@ -29,7 +29,7 @@ const Introduction: React.FC = () => {
                         </p>
                     </motion.div>
                 </div>
-                <div className="text-gray-300 w-full flex justify-center items-end flex-col font-lexend">
+                <div className="text-white w-full flex justify-center items-end flex-col">
                     <motion.span className="w-3/4 md:w-5/12 text-xs sm:text-sm lg:text-base  "
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}

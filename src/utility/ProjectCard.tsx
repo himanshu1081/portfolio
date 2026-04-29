@@ -53,7 +53,7 @@ const ProjectCard: React.FC<CardProps> = ({ projectName, image, githubLink, depl
         <>
             <motion.div
                 ref={cardRef}
-                className="flex justify-between md:justify-center flex-col md:flex-row items-center rounded-xl h-[90svh] lg:h-[85svh] md:p-2 w-23/24 z-0 sticky top-10 lg:top-20 md:gap-2 font-inter-display-bold bg-[#121111] md:border md:border-black/20  }"
+                className="flex justify-around md:justify-center flex-col md:flex-row items-center rounded-xl h-[90svh] lg:h-[85svh] md:p-2 w-23/24 z-0 sticky top-10 lg:top-20 md:gap-2 font-inter-display-bold bg-[#121111] md:border md:border-black/20  }"
                 style={{ opacity, scale }}>
                 <div className="w-full h-full md:w-4/6 md:h-4/4 " >
                     <span className="relative">
@@ -65,7 +65,7 @@ const ProjectCard: React.FC<CardProps> = ({ projectName, image, githubLink, depl
                                 <FaArrowRight />
                             </span>
                         </div>
-                        <img src={image[currentImage]} alt="" className="border border-[#2c2929] h-55 sm:h-70 w-full md:h-4/4 md:w-6/6 rounded-2xl object-cover flex" />
+                        <img src={image[currentImage]} alt="project preview" loading="lazy" className="border border-[#2c2929] h-55 sm:h-70 w-full md:h-4/4 md:w-6/6 rounded-2xl object-cover flex" />
                     </span>
                 </div>
                 <div className="flex justify-between items-start gap-2 flex-col h-3/4 w-full md:w-2/6 md:h-full border border-[#2c2929] p-6 rounded-2xl">

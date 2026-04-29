@@ -23,9 +23,10 @@ const Hero: React.FC = () => {
                 <Navbar />
                 <div className="flex flex-col md:flex-row justify-center items-center relative h-full ">
                     <motion.div
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={{ opacity: 1, scale: 1.1 }}
+                        initial={{ opacity: 0, x: -500, scale: 1 }}
+                        animate={{ opacity: 1, x: 0, scale: 1.1 }}
                         transition={{ duration: 1 }}>
+
                         <img src={me2} alt="Cool Animation" className="flex justify-center items-center w-70 h-70 md:h-90 lg:h-100 object-cover" />
                         {/* <video src="src\assets\videos\my_character2.mp4" muted loop autoPlay className="flex justify-center items-center w-fit h-80 " ></video> */}
                     </motion.div>
@@ -71,7 +72,7 @@ const Hero: React.FC = () => {
                             animate={{ opacity: 1, y: "0%" }}
                             transition={{ duration: 1, delay: .5 }}>
                             <TextType
-                                text={["//Web Developer","//Frontend Developer","//Backend Developer"]}
+                                text={["//Web Developer", "//Frontend Developer", "//Backend Developer"]}
                                 typingSpeed={75}
                                 pauseDuration={3000}
                                 showCursor={true}
