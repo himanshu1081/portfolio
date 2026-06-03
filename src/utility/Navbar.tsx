@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
                 className=" w-full h-fit px-50 "
                 id="navbar">
                 <div className="flex items-center justify-between whitespace-nowrap font-inter-display font-semibold p-2 px-4 text-xs md:text-base scroll-smooth text-[#1f1f1f]">
-                    <div className="whitespace-nowrap cursor-default">
+                    <div className="whitespace-nowrap cursor-default ">
                         ©Himanshu
                     </div>
                     <div>

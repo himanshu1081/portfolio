@@ -8,7 +8,8 @@ import me1 from "../assets/videos/me1.gif";
 const Outro: React.FC = () => {
     return (
         <>
-            <div className="min-h-screen bg-[#e0e0e0] relative flex flex-col justify-center items-center text-[#1f1f1f] font-inter-display">
+            <div className="min-h-screen bg-[#e0e0e0] relative flex flex-col justify-center items-center text-[#1f1f1f] font-inter-display"
+            id="outro">
                 <motion.a
                     initial={{ opacity: 0, x: "20%", }}
                     whileInView={{ opacity: 1, x: "0%", rotate: [180, 0] }}

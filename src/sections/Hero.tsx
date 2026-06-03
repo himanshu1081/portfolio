@@ -19,7 +19,8 @@ const Hero: React.FC = () => {
 
     return (
         <>
-            <div className="flex h-screen flex-col text-[#1f1f1f] min-h-screen items-center justify-between bg-[#e0e0e0] overflow-hidden relative">
+            <div className="flex h-screen flex-col text-[#1f1f1f] min-h-screen items-center justify-between bg-[#e0e0e0] overflow-hidden relative"
+            id="hero-section">
                 <Navbar />
                 <div className="flex flex-col md:flex-row justify-center items-center relative h-full ">
                     <motion.div

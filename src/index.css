@@ -91,3 +91,25 @@ html {
   -webkit-text-stroke: 1px rgb(255, 255, 255);
   color: transparent;
 }
+
+/* Target all browsers */
+::selection {
+  background-color: #F05038; /* Your custom highlight color */
+  color: #000000;            /* Text color inside the highlight */
+}
+
+/* Target older Firefox versions if necessary */
+::-moz-selection {
+  background-color: #F05038;
+  color: #000000;
+}
+
+#hero-section ::selection{
+  background-color: black;
+  color: white;
+}
+
+#outro ::selection{
+  background-color: black;
+  color: white;
+}
