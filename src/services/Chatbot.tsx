@@ -49,7 +49,7 @@ export const Chatbot = () => {
     return (
         <>
             {open && (
-                <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl shadow-2xl w-[calc(100vw-2rem)] sm:w-80 md:w-96 max-w-screen max-h-[60vh] sm:max-h-[80vh] flex flex-col overflow-hidden">
+                <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl shadow-2xl w-[calc(100vw-2rem)] sm:w-80 md:w-96 max-w-screen max-h-[50vh] sm:max-h-[80vh] flex flex-col overflow-hidden">
                     {/* Header */}
                     <div className="flex items-center gap-3 px-3 sm:px-4 py-3 border-b border-[#2a2a2a]">
                         <img
