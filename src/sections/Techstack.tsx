@@ -34,6 +34,21 @@ const backendFrameworks: Framework[] = [
     name: "JWT",
     logo: "https://jwt.io/img/pic_logo.svg",
   },
+  {
+    sno: 5,
+    name: "PostgreSQL",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg",
+  },
+  {
+    sno: 6,
+    name: "FastAPI",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/1/1a/FastAPI_logo.svg",
+  },
+  {
+    sno: 7,
+    name: "Python",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg",
+  },
 ];
 
 const frontendFrameworks: Framework[] = [
@@ -152,6 +167,21 @@ const otherTools: Framework[] = [
     sno: 8,
     name: "Claude",
     logo: "/svg/claude-ai-icon.svg",
+  },
+  {
+    sno: 9,
+    name: "OpenCode",
+    logo: "/svg/opencode.svg",
+  },
+  {
+    sno: 10,
+    name: "LangChain",
+    logo: "/svg/langchain.svg",
+  },
+  {
+    sno: 11,
+    name: "LangGraph",
+    logo: "/svg/langgraph.svg",
   }
 ];
 
