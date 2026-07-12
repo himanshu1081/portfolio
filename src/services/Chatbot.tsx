@@ -64,7 +64,7 @@ export const Chatbot = () => {
                     </div>
 
                     {/* Messages */}
-                    <div className="flex-1 overflow-y-auto p-3 space-y-3 h-[50vh] sm:h-72 scroll-smooth">
+                    <div className="flex-1 overflow-y-auto p-3 space-y-3 scroll-smooth overscroll-contain" data-lenis-prevent>
                         {messages.map((msg, i) => (
                             <div
                                 key={i}
