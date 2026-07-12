@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { FaArrowUpLong } from "react-icons/fa6";
+import { motion, AnimatePresence } from "motion/react";
 
 type Chat = {
     owner: string;
@@ -48,8 +49,15 @@ export const Chatbot = () => {
  
     return (
         <>
-            {open && (
-                <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl shadow-2xl w-[calc(100vw-2rem)] sm:w-80 md:w-96 max-w-screen max-h-[60vh] sm:max-h-[65vh] flex flex-col overflow-hidden">
+            <AnimatePresence>
+                {open && (
+                <motion.div
+                    initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
+                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, y: 20, filter: "blur(4px)" }}
+                    transition={{ duration: 0.3 }}
+                    className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl shadow-2xl w-[calc(100vw-2rem)] sm:w-80 md:w-96 max-w-screen max-h-[60vh] sm:max-h-[65vh] flex flex-col overflow-hidden"
+                >
                     {/* Header */}
                     <div className="flex items-center gap-3 px-3 sm:px-4 py-3 border-b border-[#2a2a2a]">
                         <img
@@ -109,8 +117,9 @@ export const Chatbot = () => {
                             </button>
                         </div>
                     </div>
-                </div>
+                </motion.div>
             )}
+            </AnimatePresence>
 
             {/* Toggle button */}
             <button
