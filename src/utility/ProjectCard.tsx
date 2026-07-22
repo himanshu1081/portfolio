@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { MotionValue } from "framer-motion"
 
 
@@ -7,6 +7,13 @@ import { MotionValue } from "framer-motion"
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { FaExternalLinkAlt } from "react-icons/fa";
 
+function getPlaceholderSrc(src: string): string {
+    const base = src.replace('/images/', '/images/low-compression-images/');
+    const dot = base.lastIndexOf('.');
+    const name = dot !== -1 ? base.slice(0, dot) : base;
+    const ext = dot !== -1 ? base.slice(dot) : '';
+    return `${name}-placeholder${ext}`;
+}
 
 
 interface CardProps {
@@ -23,8 +30,13 @@ interface CardProps {
 
 const ProjectCard: React.FC<CardProps> = ({ projectName, image, githubLink, deployLink, about, date, containerProgressY, range, target }) => {
     const [currentImage, setCurrentImage] = useState<number>(0)
+    const [loaded, setLoaded] = useState<boolean>(false)
 
     const cardRef = useRef(null);
+
+    useEffect(() => {
+        setLoaded(false);
+    }, [currentImage]);
 
     const opacity: MotionValue<number> = useTransform(containerProgressY, range, [1, .6]);
     const scale: MotionValue<number> = useTransform(containerProgressY, range, [1, .6]);
@@ -56,17 +68,31 @@ const ProjectCard: React.FC<CardProps> = ({ projectName, image, githubLink, depl
                 className="flex justify-around md:justify-center flex-col md:flex-row items-center rounded-xl h-[90svh] lg:h-[85svh] md:p-2 w-23/24 z-0 sticky top-10 lg:top-20 md:gap-2 font-inter-display-bold bg-[#121111] md:border md:border-black/20  }"
                 style={{ opacity, scale }}>
                 <div className="w-full h-full md:w-4/6 md:h-4/4 " >
-                    <span className="relative">
-                        <div className="absolute flex justify-between items-center w-full h-full p-2 lg:p-5 select-none ">
-                            <span className="p-2 rounded-full bg-[#403b3b] hover:bg-black hover:scale-150 transition-all duration-75 ease-in">
-                                <FaArrowLeft onClick={previousImage} />
-                            </span>
-                            <span className="p-2 rounded-full bg-[#403b3b] hover:bg-black hover:scale-150 transition-all duration-75 ease-in" onClick={forwardImage}>
-                                <FaArrowRight />
-                            </span>
-                        </div>
-                        <img src={image[currentImage]} alt="project preview" loading="lazy" className="border border-[#2c2929] h-55 sm:h-70 w-full md:h-4/4 md:w-6/6 rounded-2xl object-cover flex" />
-                    </span>
+                        <span className="relative">
+                            <div className="absolute flex justify-between items-center w-full h-full p-2 lg:p-5 select-none z-10">
+                                <span className="p-2 rounded-full bg-[#403b3b] hover:bg-black hover:scale-150 transition-all duration-75 ease-in">
+                                    <FaArrowLeft onClick={previousImage} />
+                                </span>
+                                <span className="p-2 rounded-full bg-[#403b3b] hover:bg-black hover:scale-150 transition-all duration-75 ease-in" onClick={forwardImage}>
+                                    <FaArrowRight />
+                                </span>
+                            </div>
+                            <img
+                                src={getPlaceholderSrc(image[currentImage])}
+                                onError={(e) => {
+                                    if (e.currentTarget.src.includes('-placeholder.png')) {
+                                        e.currentTarget.src = e.currentTarget.src.replace('-placeholder.png', '-placeholder.jpg');
+                                    }
+                                }}
+                                className="absolute inset-0 w-full h-full object-cover rounded-2xl blur-xl scale-110"
+                                aria-hidden="true"
+                            />
+                            <img src={image[currentImage]} alt="project preview"
+                                loading="lazy"
+                                onLoad={() => setLoaded(true)}
+                                className={`border border-[#2c2929] h-55 sm:h-70 w-full md:h-4/4 md:w-6/6 rounded-2xl object-cover flex relative transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+                            />
+                        </span>
                 </div>
                 <div className="flex justify-between items-start gap-2 flex-col h-3/4 w-full md:w-2/6 md:h-full border border-[#2c2929] p-6 rounded-2xl">
                     <div className="flex flex-col justify-between items-start gap-2 md:gap-4">

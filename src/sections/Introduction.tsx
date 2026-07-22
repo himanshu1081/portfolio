@@ -11,7 +11,7 @@ const Introduction: React.FC = () => {
 
     const { scrollYProgress } = useScroll({
         target: ref,
-        offset: ["start 90%", "end 50%"],
+        offset: ["start 80%", "end 65%"],
     });
 
     return (
