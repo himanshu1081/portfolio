@@ -7,18 +7,10 @@ import { MotionValue } from "framer-motion"
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { FaExternalLinkAlt } from "react-icons/fa";
 
-function getPlaceholderSrc(src: string): string {
-    const base = src.replace('/images/', '/images/low-compression-images/');
-    const dot = base.lastIndexOf('.');
-    const name = dot !== -1 ? base.slice(0, dot) : base;
-    const ext = dot !== -1 ? base.slice(dot) : '';
-    return `${name}-placeholder${ext}`;
-}
-
-
 interface CardProps {
     projectName: string,
     image: Array<string>,
+    skeletonImage: Array<string>,
     githubLink: string,
     deployLink: string | null,
     about: string,
@@ -28,7 +20,7 @@ interface CardProps {
     target: Array<number>
 }
 
-const ProjectCard: React.FC<CardProps> = ({ projectName, image, githubLink, deployLink, about, date, containerProgressY, range, target }) => {
+const ProjectCard: React.FC<CardProps> = ({ projectName, image, skeletonImage, githubLink, deployLink, about, date, containerProgressY, range, target }) => {
     const [currentImage, setCurrentImage] = useState<number>(0)
     const [loaded, setLoaded] = useState<boolean>(false)
 
@@ -78,13 +70,8 @@ const ProjectCard: React.FC<CardProps> = ({ projectName, image, githubLink, depl
                                 </span>
                             </div>
                             <img
-                                src={getPlaceholderSrc(image[currentImage])}
-                                onError={(e) => {
-                                    if (e.currentTarget.src.includes('-placeholder.png')) {
-                                        e.currentTarget.src = e.currentTarget.src.replace('-placeholder.png', '-placeholder.jpg');
-                                    }
-                                }}
-                                className="absolute inset-0 w-full h-full object-cover rounded-2xl blur-xl scale-110"
+                                src={skeletonImage[currentImage]}
+                                className={`absolute inset-0 w-full h-full object-cover rounded-2xl blur-xl scale-110 transition-opacity duration-500 ${loaded ? 'opacity-0' : 'opacity-100'}`}
                                 aria-hidden="true"
                             />
                             <img src={image[currentImage]} alt="project preview"

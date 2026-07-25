@@ -10,6 +10,7 @@ interface CardProps {
     sno: number,
     projectName: string,
     image: Array<string>,
+    skeletonImage: Array<string>,
     githubLink: string,
     deployLink: string | null,
     about: string,
@@ -30,6 +31,13 @@ const Projects: Omit<CardProps, "containerProgressY" | "range" | "target">[] = [
             "/images/vastora4.png",
             "/images/vastora5.png",
         ],
+        skeletonImage: [
+            "/images/low-compression-images/vastora1-placeholder.png",
+            "/images/low-compression-images/vastora2-placeholder.png",
+            "/images/low-compression-images/vastora3-placeholder.png",
+            "/images/low-compression-images/vastora4-placeholder.png",
+            "/images/low-compression-images/vastora5-placeholder.png",
+        ],
         githubLink: "https://github.com/himanshu1081/Vastora",
         date: "June 2025 - August 2025",
         deployLink: "https://vastora.vercel.app/",
@@ -43,6 +51,11 @@ const Projects: Omit<CardProps, "containerProgressY" | "range" | "target">[] = [
             "/images/vexa1.png",
             "/images/vexa2.png",
             "/images/vexa3.png",
+        ],
+        skeletonImage: [
+            "/images/low-compression-images/vexa1-placeholder.png",
+            "/images/low-compression-images/vexa2-placeholder.png",
+            "/images/low-compression-images/vexa3-placeholder.png",
         ],
         githubLink: "https://github.com/himanshu1081/vexa",
         date: "November 2025",
@@ -58,6 +71,11 @@ const Projects: Omit<CardProps, "containerProgressY" | "range" | "target">[] = [
             "/images/MakeMyResume2.png",
             "/images/MakeMyResume3.png",
         ],
+        skeletonImage: [
+            "/images/low-compression-images/MakeMyResume1-placeholder.jpg",
+            "/images/low-compression-images/MakeMyResume2-placeholder.jpg",
+            "/images/low-compression-images/MakeMyResume3-placeholder.jpg",
+        ],
         githubLink: "https://github.com/himanshu1081/MakeMyResume",
         date: "March 2026",
         deployLink: null,
@@ -72,6 +90,11 @@ const Projects: Omit<CardProps, "containerProgressY" | "range" | "target">[] = [
             "/images/DesignBySupriya2.png",
             "/images/DesignBySupriya3.png",
         ],
+        skeletonImage: [
+            "/images/low-compression-images/DesignBySupriya1-placeholder.png",
+            "/images/low-compression-images/DesignBySupriya2-placeholder.png",
+            "/images/low-compression-images/DesignBySupriya3-placeholder.png",
+        ],
         githubLink: "https://github.com/himanshu1081/designbysupriya",
         date: "2025",
         deployLink: "https://designbysupriya.vercel.app/",
@@ -83,6 +106,9 @@ const Projects: Omit<CardProps, "containerProgressY" | "range" | "target">[] = [
         projectName: "Balkan Cleaning",
         image: [
             "/images/BalkanCleaning1.png",
+        ],
+        skeletonImage: [
+            "/images/low-compression-images/BalkanCleaning1-placeholder.png",
         ],
         githubLink: "https://github.com/himanshu1081/balkan-cleaning",
         date: "2026",
@@ -96,6 +122,9 @@ const Projects: Omit<CardProps, "containerProgressY" | "range" | "target">[] = [
         image: [
             "/images/WeatherApp.png",
         ],
+        skeletonImage: [
+            "/images/low-compression-images/WeatherApp-placeholder.png",
+        ],
         githubLink: "https://github.com/himanshu1081/Weather-App",
         date: "2024",
         deployLink: "https://himanshu1081.github.io/Weather-App/",
@@ -107,6 +136,9 @@ const Projects: Omit<CardProps, "containerProgressY" | "range" | "target">[] = [
         projectName: "Spotify Clone",
         image: [
             "/images/Spotify.png",
+        ],
+        skeletonImage: [
+            "/images/low-compression-images/Spotify-placeholder.png",
         ],
         githubLink: "https://github.com/himanshu1081/Spotify-Clone",
         date: "2024",
@@ -207,6 +239,7 @@ export default function ScrollStack() {
                                 <ProjectCard
                                     key={index}
                                     image={c.image}
+                                    skeletonImage={c.skeletonImage}
                                     projectName={c.projectName}
                                     githubLink={c.githubLink}
                                     deployLink={c.deployLink}
