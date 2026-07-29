@@ -7,7 +7,7 @@
 /* Local fonts */
 @font-face {
   font-family: 'Inter';
-  src: url('/fonts/Inter.ttf') format('truetype');
+  src: url("assets/fonts/Inter.ttf") format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -15,7 +15,7 @@
 
 @font-face {
   font-family: 'Chillax';
-  src: url('/fonts/Chillax-Variable.ttf') format('truetype');
+  src: url("assets/fonts/Chillax-Variable.ttf") format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -23,7 +23,7 @@
 
 @font-face {
   font-family: 'Humane-Bold';
-  src: url('/fonts/Humane-Bold.ttf') format('truetype');
+  src: url("assets/fonts/Humane-Bold.ttf") format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;

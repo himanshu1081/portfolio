@@ -1,4 +1,4 @@
-import { motion } from "motion/react"
+import { motion } from "framer-motion"
 import TextType from "../utility/TextType";
 import Navbar from "../utility/Navbar";
 

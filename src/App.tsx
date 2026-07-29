@@ -5,13 +5,13 @@ import Projects from './sections/Projects'
 import Lenis from 'lenis'
 import Outro from './sections/Outro'
 import { Chatbot } from './services/Chatbot'
-import { motion } from "motion/react"
+import { motion } from "framer-motion"
 
 
 
 function App() {
   // Initialize Lenis
-  const _lenis = new Lenis({
+  new Lenis({
     autoRaf: true, 
   });
  

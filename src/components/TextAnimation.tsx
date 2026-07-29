@@ -1,4 +1,4 @@
-import { motion, MotionValue, useTransform } from "motion/react";
+import { motion, MotionValue, useTransform } from "framer-motion";
 
 type TextAnimationProps = {
   text: string;

@@ -1,4 +1,4 @@
-import { motion, useInView } from "motion/react"
+import { motion, useInView } from "framer-motion"
 import type { MotionProps } from "framer-motion";
 
 

@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useTransform } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import { MotionValue } from "framer-motion"
 
@@ -16,11 +16,10 @@ interface CardProps {
     about: string,
     date: string,
     containerProgressY: MotionValue<number>,
-    range: Array<number>,
-    target: Array<number>
+    range: Array<number>
 }
 
-const ProjectCard: React.FC<CardProps> = ({ projectName, image, skeletonImage, githubLink, deployLink, about, date, containerProgressY, range, target }) => {
+const ProjectCard: React.FC<CardProps> = ({ projectName, image, skeletonImage, githubLink, deployLink, about, date, containerProgressY, range }) => {
     const [currentImage, setCurrentImage] = useState<number>(0)
     const [loaded, setLoaded] = useState<boolean>(false)
 

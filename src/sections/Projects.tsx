@@ -1,5 +1,5 @@
 import ProjectCard from "../utility/ProjectCard";
-import { motion, useScroll } from "motion/react"
+import { motion, useScroll } from "framer-motion"
 import { MotionValue } from "framer-motion"
 import { useRef, useState, useEffect } from "react";
 import Box from "../utility/Box";
@@ -16,11 +16,10 @@ interface CardProps {
     about: string,
     date: string,
     containerProgressY: MotionValue<number>,
-    range: Array<number>,
-    target: Array<number>
+    range: Array<number>
 }
 
-const Projects: Omit<CardProps, "containerProgressY" | "range" | "target">[] = [
+const Projects: Omit<CardProps, "containerProgressY" | "range">[] = [
     {
         sno: 1,
         projectName: "Vastora",
@@ -234,7 +233,6 @@ export default function ScrollStack() {
                 <div className="w-full mt-50 mb-50" >
                     <div className="flex flex-col gap-50 justify-center items-center w-full " ref={containRef}>
                         {Projects.slice(0, 3).map((c, index) => {
-                            const target: Array<number> = [5];
                             return (
                                 <ProjectCard
                                     key={index}
@@ -246,12 +244,10 @@ export default function ScrollStack() {
                                     about={c.about}
                                     date={c.date}
                                     containerProgressY={scrollYProgress}
-                                    range={[.333 + (index * .333), .666 * (index + 1)]}
-                                    target={target}
+                                    range={[index / 3, (index + 1) / 3]}
                                 />
                             )
-                        }
-                        )}
+                        })}
                     </div>
                 </div>
                 <div className="flex w-full items-center justify-center mb-12">
