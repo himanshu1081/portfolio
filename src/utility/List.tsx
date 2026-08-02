@@ -22,7 +22,7 @@ const List: React.FC<ListProps> = ({ sno, name, logo }) => {
                     </span>
                 </div>
                 <span className="font-dm-mono text-base lg:text-lg">
-                    0{sno}
+                    {sno>9? sno:`0${sno}`}
                 </span>
             </motion.div>
         </>
