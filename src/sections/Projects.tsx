@@ -1,6 +1,5 @@
 import ProjectCard from "../utility/ProjectCard";
-import { motion, useScroll } from "framer-motion"
-import { MotionValue } from "framer-motion"
+import { motion } from "framer-motion"
 import { useRef, useState, useEffect } from "react";
 import Box from "../utility/Box";
 import { IoIosCloseCircle } from "react-icons/io";
@@ -15,11 +14,9 @@ interface CardProps {
     deployLink: string | null,
     about: string,
     date: string,
-    containerProgressY: MotionValue<number>,
-    range: Array<number>
 }
 
-const Projects: Omit<CardProps, "containerProgressY" | "range">[] = [
+const Projects: CardProps[] = [
     {
         sno: 1,
         projectName: "Vastora",
@@ -152,12 +149,6 @@ const Projects: Omit<CardProps, "containerProgressY" | "range">[] = [
 
 
 export default function ScrollStack() {
-    const containRef = useRef(null);
-    const { scrollYProgress } = useScroll({
-        target: containRef,
-        offset: ["start start", "end end"]
-    })
-
     const [openModal, setOpenModal] = useState<boolean>(false)
     const modalRef = useRef<HTMLDivElement | null>(null);
 
@@ -175,7 +166,6 @@ export default function ScrollStack() {
             if (el) enableBodyScroll(el);
         };
     }, [openModal]);
-
 
     useEffect(() => {
         return () => {
@@ -230,25 +220,21 @@ export default function ScrollStack() {
                         </span>
                     </span>
                 </motion.div>
-                <div className="w-full mt-50 mb-50" >
-                    <div className="flex flex-col gap-50 justify-center items-center w-full " ref={containRef}>
-                        {Projects.slice(0, 3).map((c, index) => {
-                            return (
-                                <ProjectCard
-                                    key={index}
-                                    image={c.image}
-                                    skeletonImage={c.skeletonImage}
-                                    projectName={c.projectName}
-                                    githubLink={c.githubLink}
-                                    deployLink={c.deployLink}
-                                    about={c.about}
-                                    date={c.date}
-                                    containerProgressY={scrollYProgress}
-                                    range={[index / 3, (index + 1) / 3]}
-                                />
-                            )
-                        })}
-                    </div>
+                <div className="w-full mt-50" >
+                    {Projects.slice(0, 3).map((c) => {
+                        return (
+                            <ProjectCard
+                                key={c.sno}
+                                image={c.image}
+                                skeletonImage={c.skeletonImage}
+                                projectName={c.projectName}
+                                githubLink={c.githubLink}
+                                deployLink={c.deployLink}
+                                about={c.about}
+                                date={c.date}
+                            />
+                        )
+                    })}
                 </div>
                 <div className="flex w-full items-center justify-center mb-12">
                     <button className="px-4 py-2 border border-[#f05038] rounded-sm hover:bg-black hover:border-black cursor-pointer"
