@@ -1,11 +1,19 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useState, useRef, useEffect } from "react";
+import { motion, useTransform, type MotionValue, type PanInfo } from "framer-motion";
+import { useState, useEffect } from "react";
 
 //icons
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { FaExternalLinkAlt } from "react-icons/fa";
+import { GoArrowUpRight } from "react-icons/go";
 
 interface CardProps {
+    index: number,
+    reverse?: boolean,
+    // stacking: shared scroll progress of the whole stack, the slice of it during
+    // which this card gets covered, and how far it shrinks by the end.
+    progress: MotionValue<number>,
+    range: [number, number],
+    targetScale: number,
+    top: number,
     projectName: string,
     image: Array<string>,
     skeletonImage: Array<string>,
@@ -15,131 +23,108 @@ interface CardProps {
     date: string,
 }
 
-const ProjectCard: React.FC<CardProps> = ({ projectName, image, skeletonImage, githubLink, deployLink, about, date }) => {
+const SWIPE_THRESHOLD = 50;
+
+const ProjectCard: React.FC<CardProps> = ({ index, reverse = false, progress, range, targetScale, top, projectName, image, skeletonImage, githubLink, deployLink, about, date }) => {
     const [currentImage, setCurrentImage] = useState<number>(0)
     const [loaded, setLoaded] = useState<boolean>(false)
-
-    // This wrapper is the scroll segment FOR THIS CARD ALONE.
-    const cardRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         setLoaded(false);
     }, [currentImage]);
 
-    // KEY FIX: each card tracks its own scroll progress through its own
-    // wrapper. `offset: ["start start", "end start"]` means:
-    //   0 -> the wrapper's top edge hits the top of the viewport
-    //   1 -> the wrapper's bottom edge hits the top of the viewport
-    // Because every card gets ONE full 0 -> 1 cycle tied to its own geometry,
-    // timing stays accurate no matter how tall the cards are or how many exist.
-    const { scrollYProgress } = useScroll({
-        target: cardRef,
-        offset: ["start start", "end start"]
-    });
+    const scale = useTransform(progress, range, [1, targetScale]);
 
-    // With its own progress we can describe the same "hold then shrink" motion
-    // without splitting the parent into equal ranges. The [0, 0.7, 1] window
-    // just means: stay full size for the first 70% of this card's trip, then
-    // ease down in the final 30%.
-    const scale: any = useTransform(scrollYProgress, [0, 0.7, 1], [1, 1, 0.82]);
-    const opacity: any = useTransform(scrollYProgress, [0, 0.7, 1], [1, 1, 0.65]);
+    const hasMultiple = image.length > 1;
 
+    const forwardImage = () => setCurrentImage((i) => (i + 1) % image.length);
+    const previousImage = () => setCurrentImage((i) => (i - 1 + image.length) % image.length);
 
-
-    function forwardImage() {
-        if (currentImage === image.length - 1) {
-            setCurrentImage(0)
-
-        } else {
-            setCurrentImage(currentImage + 1)
-        }
-    }
-
-    function previousImage() {
-        if (currentImage === 0) {
-            setCurrentImage(image.length - 1)
-        } else {
-            setCurrentImage(currentImage - 1)
-        }
-    }
-
+    const handleDragEnd = (_: unknown, info: PanInfo) => {
+        if (info.offset.x < -SWIPE_THRESHOLD) forwardImage();
+        else if (info.offset.x > SWIPE_THRESHOLD) previousImage();
+    };
 
     return (
-        <>
-            {/*
-              Each card gets its own full-height scroll segment (`cardRef`).
-              The card inside is `position: sticky; top: 0`, so while this
-              segment scrolls through the viewport the card stays pinned near
-              the top. When the segment's bottom reaches the viewport top
-              (progress -> 1) the card scales/recedes and the NEXT card's
-              segment scrolls in underneath it. Cards follow each other in
-              sequence — they are NOT permanently stacked on top of each other.
-            */}
-            <div ref={cardRef} className="relative h-[100svh] w-full">
-                <motion.div
-                    className="sticky top-10 flex justify-around md:justify-center flex-col md:flex-row items-center rounded-xl h-[90svh] lg:h-[85svh] md:p-2 w-full md:w-full md:border md:border-black/20  font-inter-display-bold bg-[#121111]"
-                    style={{ opacity, scale }}>
-                    <div className="w-full h-full md:w-4/6 md:h-full " >
-                            <span className="relative">
-                                <div className="absolute flex justify-between items-center w-full h-full p-2 lg:p-5 select-none z-10">
-                                    <span className="p-2 rounded-full bg-[#403b3b] hover:bg-black hover:scale-150 transition-all duration-75 ease-in">
-                                        <FaArrowLeft onClick={previousImage} />
-                                    </span>
-                                    <span className="p-2 rounded-full bg-[#403b3b] hover:bg-black hover:scale-150 transition-all duration-75 ease-in" onClick={forwardImage}>
-                                        <FaArrowRight />
-                                    </span>
-                                </div>
-                                <img
-                                    src={skeletonImage[currentImage]}
-                                    className={`absolute inset-0 w-full h-full object-cover rounded-2xl blur-xl scale-110 transition-opacity duration-500 ${loaded ? 'opacity-0' : 'opacity-100'}`}
-                                    aria-hidden="true"
-                                />
-                                <img src={image[currentImage]} alt="project preview"
-                                    loading="lazy"
-                                    onLoad={() => setLoaded(true)}
-                                    className={`border border-[#2c2929] h-55 sm:h-70 w-full md:h-full md:w-28/30 rounded-2xl object-cover flex relative transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
-                                />
-                            </span>
-                    </div>
-                    <div className="flex justify-between items-start gap-2 flex-col h-3/4 w-full md:w-2/6 md:h-full border border-[#2c2929] p-6 rounded-2xl">
-                        <div className="flex flex-col justify-between items-start gap-2 md:gap-4">
-                            <span className="font-dm-mono font-bold text-xs md:text-sm lg:text-base xl:text-xl">
-                                ({date})
-                            </span>
-                            <span className="text-lg sm:text-3xl md:text-4xl lg:text-5xl 2xl:text-5xl">
-                                {projectName}
-                            </span>
-                            <span className="font-instrument text-[#a29b9b] text-xs md:text-sm lg:text-base 2xl:text-md">
-                                {about}
-                            </span>
-                        </div>
-                        <div className="flex flex-col w-full font-inter text-[#a29b9b] font-semibold text-xs lg:text-base ">
-                            <a href={githubLink}
-                                target="_blank"
-                                className="flex justify-start gap-2 items-center border-y p-2 " >
-                                <span className="hover:text-white">
-                                    Github
-                                </span>
-                                <span>
-                                    <FaExternalLinkAlt />
-                                </span></a>
-                            {deployLink &&
-                                <a href={deployLink}
-                                    target="_blank"
-                                    className="flex justify-start gap-2 items-center border-y p-2 " >
-                                    <span className="hover:text-white">
-                                        Deployed Link
-                                    </span>
-                                    <span>
-                                        <FaExternalLinkAlt />
-                                    </span>
-                                </a>
-                            }
-                        </div>
-                    </div>
-                </motion.div >
+        // Sticky at a fixed pixel offset (not vh) so mobile address-bar resizing
+        // can't shift it; each card is only as tall as its content.
+        <motion.article
+            className="sticky grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-10 p-4 md:p-6 rounded-2xl border border-[#2c2929] bg-[#121111] items-center origin-top shadow-[0_-20px_40px_rgba(0,0,0,0.5)]"
+            style={{ top, scale }}>
+
+            {/* image carousel */}
+            <div className={`md:col-span-7 ${reverse ? "md:order-2" : ""}`}>
+                <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-[#2c2929] bg-[#1a1919] group">
+                    <img
+                        src={skeletonImage[currentImage]}
+                        className={`absolute inset-0 w-full h-full object-cover blur-xl scale-110 transition-opacity duration-500 ${loaded ? 'opacity-0' : 'opacity-100'}`}
+                        aria-hidden="true"
+                    />
+                    <motion.img
+                        key={currentImage}
+                        src={image[currentImage]}
+                        alt={`${projectName} preview ${currentImage + 1}`}
+                        loading="lazy"
+                        onLoad={() => setLoaded(true)}
+                        draggable={false}
+                        drag={hasMultiple ? "x" : false}
+                        dragConstraints={{ left: 0, right: 0 }}
+                        dragElastic={0.2}
+                        dragDirectionLock
+                        onDragEnd={handleDragEnd}
+                        style={{ touchAction: "pan-y" }}
+                        className={`relative w-full h-full object-cover object-top transition-opacity duration-500 ${hasMultiple ? "cursor-grab active:cursor-grabbing" : ""} ${loaded ? 'opacity-100' : 'opacity-0'}`}
+                    />
+
+                    {hasMultiple && (
+                        <>
+                            <button onClick={previousImage} aria-label="Previous image"
+                                className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/60 backdrop-blur hover:bg-[#f05038] hover:text-black transition-all duration-150 md:opacity-0 md:group-hover:opacity-100 cursor-pointer">
+                                <FaArrowLeft size={12} />
+                            </button>
+                            <button onClick={forwardImage} aria-label="Next image"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/60 backdrop-blur hover:bg-[#f05038] hover:text-black transition-all duration-150 md:opacity-0 md:group-hover:opacity-100 cursor-pointer">
+                                <FaArrowRight size={12} />
+                            </button>
+                            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 px-2 py-1.5 rounded-full bg-black/50 backdrop-blur">
+                                {image.map((_, i) => (
+                                    <button key={i} onClick={() => setCurrentImage(i)} aria-label={`Show image ${i + 1}`}
+                                        className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${i === currentImage ? "w-5 bg-[#f05038]" : "w-1.5 bg-white/50 hover:bg-white"}`} />
+                                ))}
+                            </div>
+                        </>
+                    )}
+                </div>
             </div>
-        </>
+
+            {/* info */}
+            <div className={`md:col-span-5 flex flex-col gap-4 md:gap-6 ${reverse ? "md:order-1" : ""}`}>
+                <div className="flex items-center justify-between font-dm-mono text-xs md:text-sm text-[#8a8a8a]">
+                    <span>( {String(index).padStart(2, "0")} )</span>
+                    <span>{date}</span>
+                </div>
+                <h3 className="font-inter-display-bold text-3xl sm:text-4xl lg:text-5xl xl:text-6xl leading-none tracking-tight">
+                    {projectName}
+                </h3>
+                <p className="font-inter-display text-[#a29b9b] text-sm lg:text-base max-w-md">
+                    {about}
+                </p>
+                <div className="flex flex-wrap gap-3 font-inter-display text-sm">
+                    {deployLink &&
+                        <a href={deployLink} target="_blank"
+                            className="group flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-black hover:bg-[#f05038] transition-colors duration-150">
+                            Live site
+                            <GoArrowUpRight className="transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                        </a>
+                    }
+                    <a href={githubLink} target="_blank"
+                        className="group flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#403b3b] hover:border-white transition-colors duration-150">
+                        Source
+                        <GoArrowUpRight className="transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </a>
+                </div>
+            </div>
+        </motion.article>
     );
 };
 

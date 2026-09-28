@@ -1,9 +1,7 @@
 import ProjectCard from "../utility/ProjectCard";
-import { motion } from "framer-motion"
-import { useRef, useState, useEffect } from "react";
-import Box from "../utility/Box";
-import { IoIosCloseCircle } from "react-icons/io";
-import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from "body-scroll-lock";
+import { motion, useScroll } from "framer-motion"
+import { useEffect, useRef, useState } from "react";
+import { GoArrowUpRight } from "react-icons/go";
 
 interface CardProps {
     sno: number,
@@ -145,86 +143,72 @@ const Projects: CardProps[] = [
 
 ];
 
+const FEATURED_COUNT = 3;
 
+export default function ProjectsSection() {
+    const featured = Projects.slice(0, FEATURED_COUNT);
+    const more = Projects.slice(FEATURED_COUNT);
 
+    const stackRef = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: stackRef,
+        offset: ["start start", "end end"],
+    });
 
-export default function ScrollStack() {
-    const [openModal, setOpenModal] = useState<boolean>(false)
-    const modalRef = useRef<HTMLDivElement | null>(null);
+    // The heading sticks above the cards, so cards pin just below it. Its height
+    // changes with breakpoints, so measure it instead of hardcoding.
+    const headingRef = useRef<HTMLHeadingElement>(null);
+    const [headingHeight, setHeadingHeight] = useState(0);
 
     useEffect(() => {
-        const el = modalRef.current;
+        const el = headingRef.current;
         if (!el) return;
-
-        if (openModal) {
-            disableBodyScroll(el);
-        } else {
-            enableBodyScroll(el);
-        }
-
-        return () => {
-            if (el) enableBodyScroll(el);
-        };
-    }, [openModal]);
-
-    useEffect(() => {
-        return () => {
-            clearAllBodyScrollLocks();
-        };
+        const observer = new ResizeObserver(() => setHeadingHeight(el.offsetHeight));
+        observer.observe(el);
+        return () => observer.disconnect();
     }, []);
 
     return (
-        <>
-            {
-                openModal &&
-                <div className="h-screen w-screen bg-black/85 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-99"
-                    onClick={() => setOpenModal(false)} >
-                </div>
+        <div className="w-full p-5 flex flex-col bg-[#121111] relative" id="projects">
 
-            }
-            {
-                openModal &&
-                <div
-                    ref={modalRef}
-                    onClick={(e) => { e.stopPropagation() }}
-                    className="h-5/6 w-5/6 bg-black/85 backdrop-blur-2xl border-white/10 border fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-100 rounded-lg overflow-y-auto ">
-                    <div className="flex justify-between p-2 px-5">
-                        <h3>All Projects</h3>
-                        <button className="cursor-pointer rounded-full flex items-center justify-center" onClick={() => setOpenModal(false)}>
-                            <IoIosCloseCircle color="red" />
-                        </button>
-                    </div>
-                    <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-center justify-center">
-                        {Projects.map((p, index) => (
-                            <div key={index} className="">
-                                <Box name={p.projectName} image={p.image[0]} about={p.about} githubLink={p.githubLink} deployedLink={p.deployLink} />
-                            </div>
-                        ))}
-                    </div>
-                </div>
+            {/* top bar */}
+            <motion.div className="flex items-center gap-4 w-full text-sm sm:text-lg font-inter-display"
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1 }}
+                viewport={{ once: true, amount: 0.3 }}>
+                <span className="text-[#f05038] flex items-center gap-3 shrink-0">
+                    //
+                    <span className="font-inter-display-bold">Projects</span>
+                </span>
+                <div className="flex-1 h-px bg-[#403b3b]" />
+                <span className="font-dm-mono text-xs sm:text-sm text-[#8a8a8a] shrink-0">
+                    ( {String(Projects.length).padStart(2, "0")} )
+                </span>
+            </motion.div>
 
-            }
-            <div
-                className="w-full p-3 flex justify-between items-center flex-col bg-[#121212] border-[#000000] shadow-xl gap-4 relative rounded-md"
-                id="projects" >
-
-                <motion.div className="text-[#f05038] text-sm sm:text-lg font-inter-display w-full z-10 sticky left-2 top-2"
-                    initial={{ opacity: 0, y: 10 }}
+            {/* heading stays pinned while the featured cards stack beneath it */}
+            <div className="relative w-full pt-12 md:pt-20">
+                <motion.h2 ref={headingRef}
+                    className="sticky top-0 z-10 bg-[#121111] font-inter-display-bold text-4xl sm:text-6xl lg:text-8xl leading-[0.95] tracking-tight py-4 md:py-6"
+                    initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1 }}
-                    viewport={{ once: true, amount: 0.3 }}>
-                    <span className="w-full flex justify-start items-center gap-3 ">
-                        //
-                        <span className="font-inter-display-bold">
-                            Projects
-                        </span>
-                    </span>
-                </motion.div>
-                <div className="w-full mt-50" >
-                    {Projects.slice(0, 3).map((c) => {
-                        return (
+                    viewport={{ once: true }}>
+                    Selected <span className="font-instrument-serif italic font-normal text-[#f05038]">work</span>
+                </motion.h2>
+
+                {/* featured projects: sticky stacked cards */}
+                <div ref={stackRef} className="w-full">
+                    {featured.map((c, i) => (
+                        <div key={c.sno} className="contents">
                             <ProjectCard
-                                key={c.sno}
+                                index={c.sno}
+                                reverse={i % 2 === 1}
+                                progress={scrollYProgress}
+                                range={[i / featured.length, 1]}
+                                targetScale={1 - (featured.length - 1 - i) * 0.05}
+                                top={headingHeight + 8 + i * 20}
                                 image={c.image}
                                 skeletonImage={c.skeletonImage}
                                 projectName={c.projectName}
@@ -233,19 +217,59 @@ export default function ScrollStack() {
                                 about={c.about}
                                 date={c.date}
                             />
-                        )
-                    })}
-                </div>
-                <div className="flex w-full items-center justify-center mb-12">
-                    <button className="px-4 py-2 border border-[#f05038] rounded-sm hover:bg-black hover:border-black cursor-pointer"
-                        onClick={() => {
-                            setOpenModal(true)
-                        }}
-                    >
-                        View All Projects
-                    </button>
+                            {/* scroll distance before the next card slides over */}
+                            <div className={i === featured.length - 1 ? "h-10" : "h-[40svh]"} />
+                        </div>
+                    ))}
                 </div>
             </div>
-        </>
+
+            {/* the rest, as a compact list */}
+            <div className="w-full pt-10 md:pt-16 pb-12">
+                <motion.h3 className="font-dm-mono text-xs sm:text-sm text-[#8a8a8a] pb-4"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ duration: .8 }}
+                    viewport={{ once: true }}>
+                    ( More projects )
+                </motion.h3>
+                <ul className="border-t border-[#2c2929]">
+                    {more.map((p, i) => (
+                        <motion.li key={p.sno}
+                            className="group grid grid-cols-12 gap-3 items-center py-5 md:py-6 border-b border-[#2c2929]"
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: .6, delay: i * .08 }}
+                            viewport={{ once: true }}>
+                            <span className="col-span-2 md:col-span-1 font-dm-mono text-xs md:text-sm text-[#8a8a8a]">
+                                {String(p.sno).padStart(2, "0")}
+                            </span>
+                            <div className="col-span-10 md:col-span-4 flex flex-col">
+                                <span className="font-inter-display-bold text-xl sm:text-2xl lg:text-3xl group-hover:text-[#f05038] transition-colors duration-150">
+                                    {p.projectName}
+                                </span>
+                                <span className="md:hidden font-dm-mono text-xs text-[#8a8a8a] pt-1">{p.date}</span>
+                            </div>
+                            <p className="hidden md:block md:col-span-4 font-inter-display text-sm text-[#a29b9b]">
+                                {p.about}
+                            </p>
+                            <span className="hidden md:block md:col-span-1 font-dm-mono text-sm text-[#8a8a8a] text-right">
+                                {p.date}
+                            </span>
+                            <div className="col-start-3 col-span-10 md:col-start-auto md:col-span-2 flex gap-4 md:justify-end font-inter-display text-sm">
+                                {p.deployLink &&
+                                    <a href={p.deployLink} target="_blank" className="flex items-center gap-1 hover:text-[#f05038]">
+                                        Live <GoArrowUpRight />
+                                    </a>
+                                }
+                                <a href={p.githubLink} target="_blank" className="flex items-center gap-1 text-[#a29b9b] hover:text-white">
+                                    Source <GoArrowUpRight />
+                                </a>
+                            </div>
+                        </motion.li>
+                    ))}
+                </ul>
+            </div>
+        </div>
     );
 }

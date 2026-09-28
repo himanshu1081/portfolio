@@ -6,6 +6,7 @@ type TextAnimationProps = {
   className?: string;
   animatedColor?: string; // the single target color words fade into
   whiteRanges?: [number, number][]; // inclusive word-index ranges to keep white
+  serifRanges?: [number, number][]; // inclusive word-index ranges rendered in italic serif
 };
 
 type WordProps = {
@@ -15,6 +16,7 @@ type WordProps = {
   totalWords: number;
   animatedColor: string;
   isWhite: boolean;
+  isSerif: boolean;
 };
 
 const Word: React.FC<WordProps> = ({
@@ -24,6 +26,7 @@ const Word: React.FC<WordProps> = ({
   totalWords,
   animatedColor,
   isWhite,
+  isSerif,
 }) => {
   const start = index / totalWords;
   const end = (index + 1) / totalWords;
@@ -35,7 +38,7 @@ const Word: React.FC<WordProps> = ({
   );
 
   return (
-    <motion.span style={{ color }}>
+    <motion.span style={{ color }} className={isSerif ? "font-instrument-serif italic" : undefined}>
       {word}{" "}
     </motion.span>
   );
@@ -47,11 +50,12 @@ const TextAnimation: React.FC<TextAnimationProps> = ({
   className,
   animatedColor = "#f05038",
   whiteRanges = [],
+  serifRanges = [],
 }) => {
   const words = text.split(" ");
 
-  const isIndexWhite = (index: number) =>
-    whiteRanges.some(([start, end]) => index >= start && index <= end);
+  const inRanges = (ranges: [number, number][], index: number) =>
+    ranges.some(([start, end]) => index >= start && index <= end);
 
   return (
     <p className={className}>
@@ -63,7 +67,8 @@ const TextAnimation: React.FC<TextAnimationProps> = ({
           totalWords={words.length}
           progress={progress}
           animatedColor={animatedColor}
-          isWhite={isIndexWhite(index)}
+          isWhite={inRanges(whiteRanges, index)}
+          isSerif={inRanges(serifRanges, index)}
         />
       ))}
     </p>

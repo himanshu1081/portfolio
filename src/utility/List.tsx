@@ -14,7 +14,7 @@ const List: React.FC<ListProps> = ({ sno, name, logo }) => {
                 whileInView={{ opacity: 1, y: "0%" }}
                 transition={{ duration: 1 }}
                 viewport={{ once: true ,amount:.5}}
-                className='font-inter-display-bold flex justify-between items-center gap-3 border-y py-2 md:py-4 px-1 md:px-2 border-[#403b3b] hover:bg-[#403b3b] hover:scale-101 transition ease-in duration-100' >
+                className='font-inter-display-bold cursor-default select-none flex justify-between items-center gap-3 border-y py-2 md:py-4 px-1 md:px-2 border-[#403b3b] hover:bg-[#403b3b] hover:scale-101 transition ease-in duration-100' >
                 <div className="flex justify-start items-center gap-3 ">
                     <img src={logo} className="w-10 h-10 p-2 border-2 border-[#403b3b] rounded" />
                     <span className="text-base lg:text-lg whitespace-nowrap">
@@ -22,7 +22,7 @@ const List: React.FC<ListProps> = ({ sno, name, logo }) => {
                     </span>
                 </div>
                 <span className="font-dm-mono text-base lg:text-lg">
-                    {sno>9? sno:`0${sno}`}
+                {sno>9? sno:`0${sno}`}
                 </span>
             </motion.div>
         </>
