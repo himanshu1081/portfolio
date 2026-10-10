@@ -2,6 +2,7 @@ import { Hero } from './sections/Hero'
 import Introduction from './sections/Introduction'
 import Services from './sections/Techstack'
 import Projects from './sections/Projects'
+import Experience from './sections/Experience'
 import Lenis from 'lenis'
 import Outro from './sections/Outro'
 import { Chatbot } from './services/Chatbot'
@@ -29,6 +30,7 @@ function App() {
         <Hero />
         <Introduction />
         <Services />
+        <Experience />
         <Projects />
         <Outro />
       </div>

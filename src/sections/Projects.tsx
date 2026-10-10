@@ -8,7 +8,7 @@ interface CardProps {
     projectName: string,
     image: Array<string>,
     skeletonImage: Array<string>,
-    githubLink: string,
+    githubLink: string | null,
     deployLink: string | null,
     about: string,
     date: string,
@@ -17,6 +17,23 @@ interface CardProps {
 const Projects: CardProps[] = [
     {
         sno: 1,
+        projectName: "HostKaro",
+        image: [
+            "/images/hostkaro1.png",
+            "/images/hostkaro2.png",
+        ],
+        skeletonImage: [
+            "/images/low-compression-images/hostkaro1-placeholder.png",
+            "/images/low-compression-images/hostkaro2-placeholder.png",
+        ],
+        githubLink: null,
+        date: "August 2026 - Present",
+        deployLink: "https://hostkaro.co.in",
+        about:
+            "HostKaro is a property management system (PMS) that brings bookings from Airbnb, Booking.com, MakeMyTrip and direct sites, plus guests and payments, into one dashboard. Built from scratch at Ace Stayz.",
+    },
+    {
+        sno: 2,
         projectName: "Vastora",
         image: [
             "/images/vastora1.png",
@@ -39,25 +56,6 @@ const Projects: CardProps[] = [
             "Vastora is a YouTube-like web app where users can explore, watch, and share videos seamlessly.",
     },
     {
-        sno: 2,
-        projectName: "Vexa AI",
-        image: [
-            "/images/vexa1.png",
-            "/images/vexa2.png",
-            "/images/vexa3.png",
-        ],
-        skeletonImage: [
-            "/images/low-compression-images/vexa1-placeholder.png",
-            "/images/low-compression-images/vexa2-placeholder.png",
-            "/images/low-compression-images/vexa3-placeholder.png",
-        ],
-        githubLink: "https://github.com/himanshu1081/vexa",
-        date: "November 2025",
-        deployLink: "https://vexa4ai.vercel.app/",
-        about:
-            "Vexa is an AI chat application (Gen AI) built as an OpenAI API wrapper for real-time conversational experiences.",
-    },
-    {
         sno: 3,
         projectName: "MakeMyResume",
         image: [
@@ -78,6 +76,25 @@ const Projects: CardProps[] = [
     },
     {
         sno: 4,
+        projectName: "Vexa AI",
+        image: [
+            "/images/vexa1.png",
+            "/images/vexa2.png",
+            "/images/vexa3.png",
+        ],
+        skeletonImage: [
+            "/images/low-compression-images/vexa1-placeholder.png",
+            "/images/low-compression-images/vexa2-placeholder.png",
+            "/images/low-compression-images/vexa3-placeholder.png",
+        ],
+        githubLink: "https://github.com/himanshu1081/vexa",
+        date: "November 2025",
+        deployLink: "https://vexa4ai.vercel.app/",
+        about:
+            "Vexa is an AI chat application (Gen AI) built as an OpenAI API wrapper for real-time conversational experiences.",
+    },
+    {
+        sno: 5,
         projectName: "DesignBySupriya",
         image: [
             "/images/DesignBySupriya1.png",
@@ -96,7 +113,7 @@ const Projects: CardProps[] = [
             "A modern portfolio website built for a design brand, focusing on clean UI, smooth interactions, and responsive layout.",
     },
     {
-        sno: 5,
+        sno: 6,
         projectName: "Balkan Cleaning",
         image: [
             "/images/BalkanCleaning1.png",
@@ -109,38 +126,7 @@ const Projects: CardProps[] = [
         deployLink: "https://www.balkancleaning.co.uk/",
         about:
             "A professional business website for a UK-based cleaning service, designed with performance, responsiveness, and real-world client requirements.",
-    },
-    {
-        sno: 6,
-        projectName: "Weather App",
-        image: [
-            "/images/WeatherApp.png",
-        ],
-        skeletonImage: [
-            "/images/low-compression-images/WeatherApp-placeholder.png",
-        ],
-        githubLink: "https://github.com/himanshu1081/Weather-App",
-        date: "2024",
-        deployLink: "https://himanshu1081.github.io/Weather-App/",
-        about:
-            "A weather forecasting app using API integration to display real-time weather data with a clean and minimal UI.",
-    },
-    {
-        sno: 7,
-        projectName: "Spotify Clone",
-        image: [
-            "/images/Spotify.png",
-        ],
-        skeletonImage: [
-            "/images/low-compression-images/Spotify-placeholder.png",
-        ],
-        githubLink: "https://github.com/himanshu1081/Spotify-Clone",
-        date: "2024",
-        deployLink: "https://himanshu1081.github.io/Spotify-Clone/",
-        about:
-            "A front-end clone of Spotify focusing on UI replication, layout structuring, and interactive media controls using JavaScript.",
     }
-
 ];
 
 const FEATURED_COUNT = 3;
@@ -262,9 +248,11 @@ export default function ProjectsSection() {
                                         Live <GoArrowUpRight />
                                     </a>
                                 }
-                                <a href={p.githubLink} target="_blank" className="flex items-center gap-1 text-[#a29b9b] hover:text-white">
-                                    Source <GoArrowUpRight />
-                                </a>
+                                {p.githubLink &&
+                                    <a href={p.githubLink} target="_blank" className="flex items-center gap-1 text-[#a29b9b] hover:text-white">
+                                        Source <GoArrowUpRight />
+                                    </a>
+                                }
                             </div>
                         </motion.li>
                     ))}

@@ -1,5 +1,5 @@
-import { motion, useTransform, type MotionValue, type PanInfo } from "framer-motion";
-import { useState, useEffect } from "react";
+import { AnimatePresence, motion, useTransform, type MotionValue, type PanInfo } from "framer-motion";
+import { useState, useRef } from "react";
 
 //icons
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
@@ -17,7 +17,7 @@ interface CardProps {
     projectName: string,
     image: Array<string>,
     skeletonImage: Array<string>,
-    githubLink: string,
+    githubLink: string | null,
     deployLink: string | null,
     about: string,
     date: string,
@@ -25,20 +25,45 @@ interface CardProps {
 
 const SWIPE_THRESHOLD = 50;
 
+// new image slides in from the side it's coming from, old one drifts out the other way
+const slide = {
+    enter: (dir: number) => ({ x: `${dir * 100}%`, scale: 1.05, opacity: 1 }),
+    exit: (dir: number) => ({ x: `${dir * -30}%`, scale: .95, opacity: 0 }),
+};
+
 const ProjectCard: React.FC<CardProps> = ({ index, reverse = false, progress, range, targetScale, top, projectName, image, skeletonImage, githubLink, deployLink, about, date }) => {
     const [currentImage, setCurrentImage] = useState<number>(0)
-    const [loaded, setLoaded] = useState<boolean>(false)
+    // indices of images already downloaded, so switching back to one never re-shows the blur
+    const [loadedSet, setLoadedSet] = useState<Set<number>>(new Set())
+    const loaded = loadedSet.has(currentImage)
+    const markLoaded = (i: number) => setLoadedSet((s) => s.has(i) ? s : new Set(s).add(i))
 
-    useEffect(() => {
-        setLoaded(false);
-    }, [currentImage]);
+    // Once the first visible image arrives (it's lazy, so the card is near the viewport),
+    // fetch the rest in the background so the carousel is ready before it's clicked.
+    const preloaded = useRef(false)
+    const handleLoad = () => {
+        markLoaded(currentImage)
+        if (preloaded.current) return
+        preloaded.current = true
+        image.forEach((src, i) => {
+            const img = new Image()
+            img.onload = () => markLoaded(i)
+            img.src = src
+        })
+    }
 
     const scale = useTransform(progress, range, [1, targetScale]);
 
     const hasMultiple = image.length > 1;
 
-    const forwardImage = () => setCurrentImage((i) => (i + 1) % image.length);
-    const previousImage = () => setCurrentImage((i) => (i - 1 + image.length) % image.length);
+    // direction (+1 next, -1 previous) decides which way the slide moves
+    const [direction, setDirection] = useState(1);
+    const goTo = (i: number, dir: number) => {
+        setDirection(dir);
+        setCurrentImage((i + image.length) % image.length);
+    };
+    const forwardImage = () => goTo(currentImage + 1, 1);
+    const previousImage = () => goTo(currentImage - 1, -1);
 
     const handleDragEnd = (_: unknown, info: PanInfo) => {
         if (info.offset.x < -SWIPE_THRESHOLD) forwardImage();
@@ -53,48 +78,64 @@ const ProjectCard: React.FC<CardProps> = ({ index, reverse = false, progress, ra
             style={{ top, scale }}>
 
             {/* image carousel */}
-            <div className={`md:col-span-7 ${reverse ? "md:order-2" : ""}`}>
-                <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-[#2c2929] bg-[#1a1919] group">
+            <div className={`md:col-span-7 flex flex-col gap-3 ${reverse ? "md:order-2" : ""}`}>
+                <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-[#2c2929] bg-[#1a1919]">
                     <img
                         src={skeletonImage[currentImage]}
                         className={`absolute inset-0 w-full h-full object-cover blur-xl scale-110 transition-opacity duration-500 ${loaded ? 'opacity-0' : 'opacity-100'}`}
                         aria-hidden="true"
                     />
-                    <motion.img
-                        key={currentImage}
-                        src={image[currentImage]}
-                        alt={`${projectName} preview ${currentImage + 1}`}
-                        loading="lazy"
-                        onLoad={() => setLoaded(true)}
-                        draggable={false}
-                        drag={hasMultiple ? "x" : false}
-                        dragConstraints={{ left: 0, right: 0 }}
-                        dragElastic={0.2}
-                        dragDirectionLock
-                        onDragEnd={handleDragEnd}
-                        style={{ touchAction: "pan-y" }}
-                        className={`relative w-full h-full object-cover object-top transition-opacity duration-500 ${hasMultiple ? "cursor-grab active:cursor-grabbing" : ""} ${loaded ? 'opacity-100' : 'opacity-0'}`}
-                    />
+                    <AnimatePresence initial={false} custom={direction}>
+                        <motion.img
+                            key={currentImage}
+                            src={image[currentImage]}
+                            alt={`${projectName} preview ${currentImage + 1}`}
+                            loading="lazy"
+                            onLoad={handleLoad}
+                            draggable={false}
+                            drag={hasMultiple ? "x" : false}
+                            dragConstraints={{ left: 0, right: 0 }}
+                            dragElastic={0.2}
+                            dragDirectionLock
+                            onDragEnd={handleDragEnd}
+                            custom={direction}
+                            variants={slide}
+                            initial="enter"
+                            animate={{ x: "0%", scale: 1, opacity: loaded ? 1 : 0 }}
+                            exit="exit"
+                            transition={{ duration: .6, ease: [0.22, 1, 0.36, 1] }}
+                            style={{ touchAction: "pan-y" }}
+                            className={`absolute inset-0 w-full h-full object-cover object-top ${hasMultiple ? "cursor-grab active:cursor-grabbing" : ""}`}
+                        />
+                    </AnimatePresence>
+                </div>
 
-                    {hasMultiple && (
-                        <>
+                {/* controls: counter, clickable progress segments, arrows */}
+                {hasMultiple && (
+                    <div className="flex items-center gap-4 font-dm-mono text-xs md:text-sm text-[#8a8a8a]">
+                        <span className="tabular-nums shrink-0">
+                            <span className="text-white">{String(currentImage + 1).padStart(2, "0")}</span> / {String(image.length).padStart(2, "0")}
+                        </span>
+                        <div className="flex-1 flex gap-1.5">
+                            {image.map((_, i) => (
+                                <button key={i} onClick={() => goTo(i, i > currentImage ? 1 : -1)} aria-label={`Show image ${i + 1}`}
+                                    className="group/seg flex-1 py-2 cursor-pointer">
+                                    <span className={`block h-0.5 rounded-full transition-colors duration-300 ${i === currentImage ? "bg-[#f05038]" : "bg-[#403b3b] group-hover/seg:bg-[#8a8a8a]"}`} />
+                                </button>
+                            ))}
+                        </div>
+                        <div className="flex gap-2 shrink-0">
                             <button onClick={previousImage} aria-label="Previous image"
-                                className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/60 backdrop-blur hover:bg-[#f05038] hover:text-black transition-all duration-150 md:opacity-0 md:group-hover:opacity-100 cursor-pointer">
-                                <FaArrowLeft size={12} />
+                                className="w-9 h-9 flex items-center justify-center rounded-full border border-[#403b3b] text-white hover:bg-[#f05038] hover:border-[#f05038] hover:text-black transition-colors duration-150 cursor-pointer">
+                                <FaArrowLeft size={11} />
                             </button>
                             <button onClick={forwardImage} aria-label="Next image"
-                                className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/60 backdrop-blur hover:bg-[#f05038] hover:text-black transition-all duration-150 md:opacity-0 md:group-hover:opacity-100 cursor-pointer">
-                                <FaArrowRight size={12} />
+                                className="w-9 h-9 flex items-center justify-center rounded-full border border-[#403b3b] text-white hover:bg-[#f05038] hover:border-[#f05038] hover:text-black transition-colors duration-150 cursor-pointer">
+                                <FaArrowRight size={11} />
                             </button>
-                            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 px-2 py-1.5 rounded-full bg-black/50 backdrop-blur">
-                                {image.map((_, i) => (
-                                    <button key={i} onClick={() => setCurrentImage(i)} aria-label={`Show image ${i + 1}`}
-                                        className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${i === currentImage ? "w-5 bg-[#f05038]" : "w-1.5 bg-white/50 hover:bg-white"}`} />
-                                ))}
-                            </div>
-                        </>
-                    )}
-                </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* info */}
@@ -117,11 +158,13 @@ const ProjectCard: React.FC<CardProps> = ({ index, reverse = false, progress, ra
                             <GoArrowUpRight className="transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                         </a>
                     }
-                    <a href={githubLink} target="_blank"
-                        className="group flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#403b3b] hover:border-white transition-colors duration-150">
-                        Source
-                        <GoArrowUpRight className="transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                    </a>
+                    {githubLink &&
+                        <a href={githubLink} target="_blank"
+                            className="group flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#403b3b] hover:border-white transition-colors duration-150">
+                            Source
+                            <GoArrowUpRight className="transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                        </a>
+                    }
                 </div>
             </div>
         </motion.article>

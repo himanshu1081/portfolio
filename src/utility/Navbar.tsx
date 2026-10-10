@@ -21,6 +21,9 @@ const Navbar: React.FC = () => {
                         <a href="#tech-stack">Tech Stack</a>
                     </div>
                     <div>
+                        <a href="#experience">Experience</a>
+                    </div>
+                    <div>
                         <a href="#projects">Projects</a>
                     </div>
                 </div>

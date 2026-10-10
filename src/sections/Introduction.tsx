@@ -3,6 +3,12 @@ import { useRef } from "react";
 import TextAnimation from "../components/TextAnimation";
 import { GoArrowDown, GoArrowUpRight } from "react-icons/go";
 
+const stats = [
+    { value: "01+", unit: "yrs", label: "building" },
+    { value: "06", unit: "projects", label: "shipped" },
+    { value: "04", unit: "roles", label: "so far" },
+];
+
 const Introduction: React.FC = () => {
 
     const text =
@@ -82,13 +88,20 @@ const Introduction: React.FC = () => {
                             style={{ opacity: hintOpacity }}>
                             <GoArrowDown className="animate-bounce" /> Keep scrolling
                         </motion.span>
-                        <motion.div className="ml-auto flex flex-col md:flex-row md:items-end gap-4 md:gap-8 w-full md:w-7/12 border-t border-[#403b3b] pt-4"
+                        <motion.div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 w-full"
                             style={{ opacity: outroOpacity, y: outroY }}>
-                            <p className="text-[#bdbdbd] text-xs sm:text-sm lg:text-base flex-1">
-                                I turn ideas into polished, functional websites with clean, efficient code. My focus is on smooth, scalable solutions that make a real impact.
-                            </p>
+                            <div className="flex gap-8 sm:gap-16">
+                                {stats.map((s) => (
+                                    <div key={s.label} className="flex flex-col">
+                                        <span className="font-inter-display-bold text-2xl sm:text-4xl lg:text-5xl">
+                                            {s.value}<span className="font-instrument-serif italic font-normal text-[#f05038] text-lg sm:text-2xl lg:text-3xl pl-1">{s.unit}</span>
+                                        </span>
+                                        <span className="font-dm-mono text-xs sm:text-sm text-[#8a8a8a]">{s.label}</span>
+                                    </div>
+                                ))}
+                            </div>
                             <a
-                                className="group shrink-0 flex items-center gap-2 px-5 py-3 rounded-full bg-white text-black hover:bg-[#f05038] transition-colors duration-150 text-xs md:text-base w-fit"
+                                className="group flex items-center gap-2 font-inter-display-bold text-base sm:text-xl hover:text-[#f05038] transition-colors duration-150"
                                 href="https://github.com/himanshu1081"
                                 target="_blank">
                                 See my work
